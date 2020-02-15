@@ -9,7 +9,7 @@ GtkWidget *grid;
 GtkWidget *entrys[81];
 sqlite3 *db;
 int timeloop=0;
-char *sodoku_map[81];//保存从数据库里取到的数独字符串
+char *sudoku_map[81];//保存从数据库里取到的数独字符串
 #define BLOCK_SIZE 80
 int used_time_h,used_time_m,used_time_s;
 used_time_h=0;
@@ -105,8 +105,8 @@ void change(GtkEntry *entry,gchar *preedit,gpointer data) {
 }
 //sql的callback
 int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-	//sql结果直接赋值给sodoku_map
-	strcpy(sodoku_map,azColName[1]);
+	//sql结果直接赋值给sudoku_map
+	strcpy(sudoku_map,azColName[1]);
 	return 0;
 }
 //根据数字棋盘map，添加label和entry控件
@@ -152,7 +152,7 @@ void game_new() {
 	char *sql;
 	char *result;
 	char *err_msg=0;
-	sql = "select map from sodoku order by random() limit 1";
+	sql = "select map from sudoku order by random() limit 1";
 	rc = sqlite3_open("db", &db);
 	if( rc ) {
 		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
@@ -169,7 +169,7 @@ void game_new() {
 			printf("get data ok\n");
 			//把数据库里带，的字符串切割，循环给map数字棋盘
 			char delims[] = ",";
-			result = strtok(sodoku_map,delims);
+			result = strtok(sudoku_map,delims);
 			int count=0;
 			while(result!= NULL) {
 				int n = atoi(result);
@@ -232,7 +232,7 @@ int main(int argc,char *argv[]) {
 	g_signal_connect(window, "destroy",G_CALLBACK (destroy), NULL);
 	//    GError **err;
 	//    gtk_window_set_icon_from_file (GTK_WINDOW(window),"icon.png",err);
-	gtk_window_set_title(GTK_WINDOW(window),"sodoku");
+	gtk_window_set_title(GTK_WINDOW(window),"sudoku");
 	gtk_window_set_keep_above(GTK_WINDOW (window), TRUE);
 	gtk_window_set_resizable (GTK_WINDOW(window),FALSE);
 	fixed = gtk_fixed_new ();
