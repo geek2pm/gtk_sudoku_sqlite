@@ -1,6 +1,6 @@
 
 ```
-sudo apt-get install libsqlite3-dev
+sudo apt-get install libsqlite3-dev libgtk-3-dev
 ```
 
 make
